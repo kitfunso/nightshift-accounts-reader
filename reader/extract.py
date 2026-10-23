@@ -22,6 +22,9 @@ SYSTEM = (
     + ". Each value is a whole number in pounds, except employees, which is a head count. "
     "Use null if the accounts do not show the figure."
 )
+# Twin task for the control adapter: one word differs, so Mubit gives it its own task and adapter.
+SYSTEM_CONTROL = SYSTEM.replace("Read the UK", "Review the UK", 1)
+assert SYSTEM_CONTROL != SYSTEM
 
 _client = OpenAI(base_url="https://api.mubit.ai/openai/v1", api_key=os.environ["MUBIT_API_KEY"])
 

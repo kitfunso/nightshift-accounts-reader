@@ -1,0 +1,1 @@
+Reviewer correction: a balance-sheet figure in brackets, or on a line called "Net current liabilities", "Net liabilities" or "Net current assets (liabilities)", is negative. Return it with a minus sign: "( 74,119 )" becomes -74119. Never return null for a line the accounts show.
