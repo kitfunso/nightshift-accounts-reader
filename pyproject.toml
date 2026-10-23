@@ -1,0 +1,15 @@
+[project]
+name = "accounts-reader"
+version = "0.1.0"
+description = "Reads UK company accounts through Mubit and grades each figure against the filer's own iXBRL tags"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.60",
+    "ixbrlparse>=0.10",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.0",
+    "python-dotenv>=1.0",
+]
+
+[tool.setuptools]
+packages = ["reader"]
