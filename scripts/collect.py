@@ -3,7 +3,7 @@
   fixed:   SYSTEM, rule before the filing in the user message
   control: SYSTEM_CONTROL (one word differs), no rule
 
-  uv run python scripts/collect.py --task fixed --start 0 --n 120
+  uv run python scripts/collect.py --task fixed --split collect2 --start 0 --n 150
 """
 from __future__ import annotations
 
@@ -29,15 +29,18 @@ RULE = Path("rules/negatives.txt")
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--task", required=True, choices=["fixed", "control"])
+    ap.add_argument("--split", default="collect2", choices=["collect", "collect2"])
     ap.add_argument("--start", type=int, default=0)
-    ap.add_argument("--n", type=int, default=120)
+    ap.add_argument("--n", type=int, default=150)
     ap.add_argument("--workers", type=int, default=4)
     a = ap.parse_args()
     logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
 
+    if a.split == "collect2":
+        splits.add_split("collect2", 150)
     s = json.loads(splits.SPLITS.read_text())
     blocked = set(s["dev"]) | set(s["held_out"])
-    filings = splits.load("collect")[a.start:a.start + a.n]
+    filings = splits.load(a.split)[a.start:a.start + a.n]
     leaked = [f.member for f in filings if f.member in blocked]
     if leaked:
         sys.exit(f"refusing: {len(leaked)} collect filings are in dev or held_out, e.g. {leaked[0]}")
@@ -52,7 +55,7 @@ def main() -> None:
 
     with ThreadPoolExecutor(a.workers) as ex:
         rows = [row for rs in ex.map(one, filings) for row in rs]
-    out = Path("data/runs") / f"collect__{a.task}__{a.start}-{a.start + len(filings)}.jsonl"
+    out = Path("data/runs") / f"{a.split}__{a.task}__{a.start}-{a.start + len(filings)}.jsonl"
     out.write_text("".join(json.dumps(r.as_dict()) + "\n" for r in rows))
     print(json.dumps({"task": a.task, "sent": len(filings), "out": str(out), **summary(rows)}))
 

@@ -16,11 +16,12 @@ load_dotenv()
 log = logging.getLogger(__name__)
 
 # Mubit makes a task from system prompt + model + format: never edit this text mid-run.
+# Figures stay as printed: Mubit drops a training row whose reply has a number not found verbatim in the input.
 SYSTEM = (
     "Read the UK company accounts below. Return one JSON object with exactly these keys: "
     + ", ".join(FIELDS)
-    + ". Each value is a whole number in pounds, except employees, which is a head count. "
-    "Use null if the accounts do not show the figure."
+    + ". Write each value as a string exactly as the accounts print it, with its commas, "
+    "for example \"205,636\". Use null if the accounts do not show the figure."
 )
 # Twin task for the control adapter: one word differs, so Mubit gives it its own task and adapter.
 SYSTEM_CONTROL = SYSTEM.replace("Read the UK", "Review the UK", 1)
@@ -39,12 +40,16 @@ class Reply:
 
 
 def _as_int(v: object) -> int | None:
+    """'( 74,119 )', '(74,119)' and '-74,119' are all -74119: accounts print negatives in brackets."""
     if v is None or isinstance(v, bool):
         return None
+    s = str(v).replace(",", "").replace("£", "").strip()
+    neg = s.startswith("(") and s.endswith(")")
     try:
-        return int(round(float(str(v).replace(",", "").replace("£", "").strip())))
+        n = int(round(float(s.strip("() "))))
     except ValueError:
         return None
+    return -abs(n) if neg else n
 
 
 def extract(company: str, text: str, model: str, *, system: str = SYSTEM,

@@ -34,6 +34,25 @@ def make_splits(zip_path: Path, seed: int = 23) -> dict[str, list[str]]:
     return out
 
 
+def add_split(name: str, size: int, seed: int = 23) -> list[str]:
+    """A new split taken further down the same shuffle, so it never overlaps the existing ones."""
+    s = json.loads(SPLITS.read_text())
+    if name in s:
+        return s[name]
+    used = {m for k, v in s.items() if k != "zip" for m in v}
+    fs = list_filings(Path(s["zip"]))
+    random.Random(seed).shuffle(fs)
+    picked: list[str] = []
+    for f in fs:
+        if f.member not in used and gold(f.html()).known() >= 4:
+            picked.append(f.member)
+        if len(picked) == size:
+            break
+    s[name] = picked
+    SPLITS.write_text(json.dumps(s, indent=1))
+    return picked
+
+
 def load(name: str) -> list[Filing]:
     s = json.loads(SPLITS.read_text())
     zp = Path(s["zip"])
