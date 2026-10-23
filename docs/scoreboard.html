@@ -1,0 +1,13 @@
+<!doctype html><meta charset=utf-8><title>Accounts reader scoreboard</title>
+<style>
+body{font:15px/1.45 system-ui,sans-serif;margin:32px;color:#1d2330;background:#f7f8fa}
+h1{font-size:20px;margin:0 0 4px} p{margin:0 0 18px;color:#5b6475}
+table{border-collapse:collapse;background:#fff;border:1px solid #dde2ea}
+th,td{padding:8px 14px;border-bottom:1px solid #eef1f5;text-align:right;vertical-align:top}
+th:first-child{text-align:left;font-weight:500} thead th{background:#f0f3f7;font-weight:600}
+td small{display:block;color:#8a93a3;font-size:12px} tr.total td b{font-size:18px}
+tr.err th,tr.err td{color:#9a3412} .dim{color:#8a93a3}
+</style>
+<h1>Accounts reader: held-out scoreboard</h1>
+<p>100 UK filings never used for training or for writing the rule. Graded against the filer's own iXBRL tags; tags that contradict the printed page are excluded.</p>
+<table><thead><tr><th></th><th>gpt-4o-mini</th><th>gpt-4o-mini + rule</th></tr></thead><tbody><tr class=total><th>All fields</th><td><b>95.0%</b><small>95% CI 92.6% to 97.0%</small></td><td><b>97.6%</b><small>95% CI 96.1% to 98.9%</small></td></tr><tr><th>Negative figures</th><td>81.4%<small>70/86</small></td><td>100.0%<small>86/86</small></td></tr><tr><th>net assets</th><td>95.7%<small>90/94</small></td><td>98.9%<small>93/94</small></td></tr><tr><th>net current assets</th><td>85.7%<small>78/91</small></td><td>100.0%<small>91/91</small></td></tr><tr><th>total assets less current liabilities</th><td>98.9%<small>87/88</small></td><td>96.6%<small>85/88</small></td></tr><tr><th>current assets</th><td>96.9%<small>94/97</small></td><td>94.8%<small>92/97</small></td></tr><tr><th>employees</th><td>97.8%<small>88/90</small></td><td>97.8%<small>88/90</small></td></tr><tr class=err><th>errors: missing</th><td>19</td><td>0</td></tr><tr class=err><th>errors: sign</th><td>0</td><td>0</td></tr><tr class=err><th>errors: prior year</th><td>1</td><td>3</td></tr><tr class=err><th>errors: wrong line</th><td>0</td><td>1</td></tr><tr class=err><th>errors: other</th><td>3</td><td>7</td></tr><tr class=dim><th>median response</th><td>1,068 ms</td><td>1,163 ms</td></tr></tbody></table>
