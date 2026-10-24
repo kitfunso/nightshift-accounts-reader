@@ -30,6 +30,10 @@ assert SYSTEM_CONTROL != SYSTEM
 _client = OpenAI(base_url="https://api.mubit.ai/openai/v1", api_key=os.environ["MUBIT_API_KEY"])
 
 
+# accounts print a zero as "NIL" or a dash; copied as printed, they mean 0
+NIL = {"nil", "-", "–", "—"}
+
+
 @dataclass(frozen=True)
 class Reply:
     values: dict[str, int | None]
@@ -44,6 +48,8 @@ def _as_int(v: object) -> int | None:
     if v is None or isinstance(v, bool):
         return None
     s = str(v).replace(",", "").replace("£", "").strip()
+    if s.lower() in NIL:
+        return 0
     neg = s.startswith("(") and s.endswith(")")
     try:
         n = int(round(float(s.strip("() "))))
