@@ -1,4 +1,3 @@
-"""Companies House daily accounts zips, read in place without unpacking."""
 from __future__ import annotations
 
 import re

@@ -1,10 +1,3 @@
-"""Send collect-split filings to one Mubit task with recording on, so they become training rows.
-
-  fixed:   SYSTEM, rule before the filing in the user message
-  control: SYSTEM_CONTROL (one word differs), no rule
-
-  uv run python scripts/collect.py --task fixed --split collect2 --start 0 --n 150
-"""
 from __future__ import annotations
 
 import argparse

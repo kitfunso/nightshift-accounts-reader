@@ -1,4 +1,3 @@
-"""One call through Mubit: filing text in, the five figures out as JSON."""
 from __future__ import annotations
 
 import json
@@ -23,14 +22,12 @@ SYSTEM = (
     + ". Write each value as a string exactly as the accounts print it, with its commas, "
     "for example \"205,636\". Use null if the accounts do not show the figure."
 )
-# Twin task for the control adapter: one word differs, so Mubit gives it its own task and adapter.
 SYSTEM_CONTROL = SYSTEM.replace("Read the UK", "Review the UK", 1)
 assert SYSTEM_CONTROL != SYSTEM
 
 _client = OpenAI(base_url="https://api.mubit.ai/openai/v1", api_key=os.environ["MUBIT_API_KEY"])
 
 
-# accounts print a zero as "NIL" or a dash; copied as printed, they mean 0
 NIL = {"nil", "-", "–", "—"}
 
 
@@ -44,7 +41,6 @@ class Reply:
 
 
 def _as_int(v: object) -> int | None:
-    """'( 74,119 )', '(74,119)' and '-74,119' are all -74119: accounts print negatives in brackets."""
     if v is None or isinstance(v, bool):
         return None
     s = str(v).replace(",", "").replace("£", "").strip()
@@ -60,7 +56,6 @@ def _as_int(v: object) -> int | None:
 
 def extract(company: str, text: str, model: str, *, system: str = SYSTEM,
             store: bool = False, retries: int = 4) -> Reply:
-    # store=False keeps the call out of Mubit's training rows; only collection runs store
     headers = {} if store else {"x-middleware-store": "false"}
     for attempt in range(retries):
         t0 = time.perf_counter()

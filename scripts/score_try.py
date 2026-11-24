@@ -1,8 +1,3 @@
-"""Score replies collected in Try models (adapters have no callable model id) with the same grader.
-
-  uv run python scripts/score_try.py --arm fixed --replies try_fixed.json
-  replies file: [{"company": "01123229", "reply": "{...}", "ms": 900}, ...]
-"""
 from __future__ import annotations
 
 import argparse

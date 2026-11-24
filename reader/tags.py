@@ -1,8 +1,3 @@
-"""The answer key: the filer's own iXBRL tags for the five fields, current and prior period.
-
-A field is graded only when its tag agrees with the figure printed on the page. Tags that
-contradict the page (see DISPUTES) are kept out of scoring and counted.
-"""
 from __future__ import annotations
 
 import io
@@ -18,8 +13,6 @@ FIELDS: dict[str, tuple[str, ...]] = {
     "employees": ("AverageNumberEmployeesDuringPeriod",),
 }
 COUNTS = {"employees"}
-# scale_on_count: page shows "2", tag says scale=-2, so the fact is 0.02 people (seen in 2026-10-23 dev set)
-# unsigned_brackets: page shows "( 23,677 )", tag has no sign="-", so the fact is +23,677
 DISPUTES = ("scale_on_count", "unsigned_brackets")
 
 
@@ -62,7 +55,6 @@ def _field_of(concept: str) -> str | None:
 
 
 def _facts(html: bytes) -> dict[str, dict[str, Fact]]:
-    """concept local name -> {period end -> Fact}, non-dimensional facts only."""
     x = IXBRL(io.BytesIO(html))
     out: dict[str, dict[str, Fact]] = {}
     for n in x.numeric:
@@ -91,7 +83,6 @@ def gold(html: bytes) -> Gold:
         current[f] = hit[cur].value if hit else None
         if hit and hit[cur].dispute:
             disputed[f] = hit[cur].dispute
-        # per concept, because opening balances can sit one day after the prior year end
         earlier = sorted((e for e in (hit or {}) if e < cur), reverse=True)
         prior[f] = hit[earlier[0]].value if earlier else None
     return Gold(cur, current, prior, disputed)

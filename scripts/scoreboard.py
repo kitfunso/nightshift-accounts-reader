@@ -1,7 +1,3 @@
-"""Build docs/scoreboard.html from data/runs/held_out__*.jsonl. One column per arm, same filings.
-
-  uv run python scripts/scoreboard.py
-"""
 from __future__ import annotations
 
 import html
@@ -63,7 +59,6 @@ def main() -> None:
     n_all = len({r.company for a, _ in providers for r in data[a]})
     sections = []
     if len(shown) > len(providers):
-        # adapters run in Try models on a subset, so compare every arm on the filings all of them saw
         common = set.intersection(*({r.company for r in data[a]} for a, _ in shown))
         same = {a: [r for r in data[a] if r.company in common] for a, _ in shown}
         sections.append(f"<h2>Every arm on the same {len(common)} filings</h2>" + table(same, shown))

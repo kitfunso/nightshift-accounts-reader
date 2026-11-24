@@ -1,4 +1,3 @@
-"""Grade replies against the tags: one row per field, each wrong field given one error type."""
 from __future__ import annotations
 
 import random
@@ -12,12 +11,12 @@ from reader.tags import Gold
 @dataclass(frozen=True)
 class Row:
     company: str
-    arm: str  # provider | provider_rule | control | fixed
+    arm: str
     field: str
     got: int | None
     tag: int
     prior: int | None
-    error: str  # right | prior_year | sign | wrong_line | missing | other
+    error: str
     mreq: str
     ms: int
     tokens_in: int
@@ -68,7 +67,6 @@ def summary(rows: list[Row]) -> dict:
 
 
 def interval(rows: list[Row], n: int = 2000, seed: int = 7) -> tuple[float, float]:
-    """95% bootstrap interval on share right, resampling filings (fields within a filing correlate)."""
     by_co: dict[str, list[int]] = {}
     for r in rows:
         by_co.setdefault(r.company, []).append(int(r.error == "right"))

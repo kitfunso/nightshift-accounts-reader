@@ -1,4 +1,3 @@
-"""Fixed dev / held-out / collect splits, written once so no run can move a filing between them."""
 from __future__ import annotations
 
 import json
@@ -13,7 +12,6 @@ SIZES = {"dev": 50, "held_out": 100, "collect": 400}
 
 
 def make_splits(zip_path: Path, seed: int = 23) -> dict[str, list[str]]:
-    """Members with at least 4 of 5 fields tagged, shuffled once, cut into the three sets."""
     if SPLITS.exists():
         return json.loads(SPLITS.read_text())
     fs = list_filings(zip_path)
@@ -35,7 +33,6 @@ def make_splits(zip_path: Path, seed: int = 23) -> dict[str, list[str]]:
 
 
 def add_split(name: str, size: int, seed: int = 23) -> list[str]:
-    """A new split taken further down the same shuffle, so it never overlaps the existing ones."""
     s = json.loads(SPLITS.read_text())
     if name in s:
         return s[name]

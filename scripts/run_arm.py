@@ -1,7 +1,3 @@
-"""Run one arm on one split and print a one-line JSON summary. Rows go to data/runs/<split>__<arm>__<model>.jsonl.
-
-  uv run python scripts/run_arm.py --split dev --arm provider --model gpt-4.1-mini
-"""
 from __future__ import annotations
 
 import argparse

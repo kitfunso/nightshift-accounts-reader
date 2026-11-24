@@ -1,4 +1,3 @@
-"""What the model sees: the filing's visible text, with every iXBRL tag and the hidden header removed."""
 from __future__ import annotations
 
 import re
@@ -8,7 +7,7 @@ from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 
-LIMIT = 16_000  # p90 of 300 filings on 2026-10-23 was 12,120 chars
+LIMIT = 16_000
 
 
 def plain_text(html: bytes, limit: int = LIMIT) -> str:
